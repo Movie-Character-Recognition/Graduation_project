@@ -26,11 +26,10 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-from sklearn.cluster import DBSCAN
-from tkinter import Tk, Canvas
+
 from PIL import ImageTk, Image
 
-from PIL import Image
+
 #import face_recognition
 
 from scipy import misc, spatial
@@ -38,17 +37,17 @@ import tensorflow as tf
 import cv2
 import subprocess
 import numpy as np
-import sys
+
 import os
 import copy
-import argparse
+
 import facenet
 import align.detect_face
 import shutil
 #import PIL.Image as pilimg
-import tkinter as tk
-from PIL import ImageTk, Image
-filepath = 'C:/project_youngk/video/'
+from tkinter import Canvas
+import tkinter as tk 
+filepath = 'D:/project_youngk/video/'
 filename = 'vtest5.mp4'
 
 frameNum = []
@@ -85,12 +84,8 @@ def get_frame_types(video_fn):
     for i in range(len(frames)):
         if frames[i].find('/') <= -1:
             tmp = frames[i]
-            print(tmp)
             frame_times.append(tmp.replace('pkt_pts_time=',''))
             
-    print("frame_times")
-    print(frame_times)
-   
     return zip(range(len(frame_types)), frame_types), frame_times[len(frame_times)-1]
 
 def save_i_keyframes(video_fn):
@@ -104,8 +99,8 @@ def save_i_keyframes(video_fn):
     margin = 44
     gpu_memory_fraction = 1.0
     
-    os.mkdir("C:/project_youngk/data/"+filename)
-    f = open("C:/project_youngk/data/"+filename+"/"+filename+".txt", 'w')
+    os.mkdir("D:/project_youngk/data/"+filename)
+    f = open("D:/project_youngk/data/"+filename+"/"+filename+".txt", 'w')
     f.write(str(frame_times))
     f.write('\n')
     
@@ -127,7 +122,6 @@ def save_i_keyframes(video_fn):
             outname = 'key'+str(frame_no)+'.jpg'
             frameNum.append(frame_no)
             cv2.imwrite("../keyframe/"+outname, frame)
-            print ('Saved: '+outname)
             f.write(str(frame_no)+str(" "))
             img = cv2.imread("../keyframe/"+'key'+str(frame_no)+'.jpg')
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -149,7 +143,7 @@ def save_i_keyframes(video_fn):
                     aligned = misc.imresize(cropped, (image_size, image_size), interp='bilinear')
                     prewhitened = facenet.prewhiten(aligned)
                     face_images.append(cropped)
-                    cv2.imwrite("C:project_youngk/keyframe/"+str(frame_no) + "_"+str(person_num)+".jpg", cropped)
+                    cv2.imwrite("D:/project_youngk/keyframe/"+str(frame_no) + "_"+str(person_num)+".jpg", cropped)
                     video_name.append(str(frame_no) + "_"+str(person_num))
                     person_num = person_num + 1
             ###
@@ -159,7 +153,7 @@ def save_i_keyframes(video_fn):
 
         #cv2.imshow('face', face_images[0])
         ##이미지 비교
-        image_path = 'C:/project_youngk/main_character/'
+        image_path = 'D:/project_youngk/main_character/'
         #images = load_and_align_data(face_images, [image_path], image_size, margin, gpu_memory_fraction)
         compare(face_images, model, image_path, image_size, margin, gpu_memory_fraction, video_name)
         #findMedoid()
@@ -174,29 +168,29 @@ def tuple_add(x, y):
     return tuple(np.add(x, y))
 
 def saveTimeline():
-    f = open("C:/project_youngk/data/"+filename+"/"+filename+".txt", 'a')
+    f = open("D:/project_youngk/data/"+filename+"/"+filename+".txt", 'a')
     
     runningTime = frameNum[len(frameNum)-1]
     f.write(str(runningTime))
     f.write('\n')
     
 
-    for i in os.listdir('C:/project_youngk/main_character/'):
+    for i in os.listdir('D:/project_youngk/main_character/'):
         
         if i in main_character:
             f.write(str(i))
             f.write(" ")
             img_list = []
-            path = 'C:/project_youngk/main_character/'+str(i)+'/'
+            path = 'D:/project_youngk/main_character/'+str(i)+'/'
             
             for j in os.listdir(path):
                 f.write(str(j))
                 f.write(" ")
                 img_list.append(str(j))
             
-            img = cv2.imread('C:/project_youngk/main_character/'+str(i)+'/'+img_list[0])
+            img = cv2.imread('D:/project_youngk/main_character/'+str(i)+'/'+img_list[0])
             img2 = Image.fromarray(img)
-            img2.save("C:/project_youngk/data/"+str(filename)+"/"+img_list[0])
+            img2.save("D:/project_youngk/data/"+str(filename)+"/"+img_list[0])
             f.write('\n')
     
     f.close()
@@ -215,7 +209,7 @@ def makeTimeline():
     runningTime = frameNum[len(frameNum)-1]
 
     character_path1 = []
-    character_path = 'C:/project_youngk/main_character/'
+    character_path = 'D:/project_youngk/main_character/'
     character_emerge = []
     character_count = 0
     count = 0;
@@ -223,14 +217,14 @@ def makeTimeline():
     image_files = []
     count2 = []
     t = 0
-    file = open("C:/project_youngk/data/"+filename+"/"+filename+".txt", 'a')
-    for i in os.listdir('C:/project_youngk/main_character/'):
+    file = open("D:/project_youngk/data/"+filename+"/"+filename+".txt", 'a')
+    for i in os.listdir('D:/project_youngk/main_character/'):
         k = 0
         if not i == '.DS_Store':
-            for f in os.listdir(os.path.join('C:/project_youngk/main_character/', i)):
+            for f in os.listdir(os.path.join('D:/project_youngk/main_character/', i)):
                 ext = os.path.splitext(f)[1]
                 if ext == '.jpg' or ext == '.jpeg' or ext == '.png':
-                     image_files.append(os.path.join('C:/project_youngk/main_character/', i, f))
+                     image_files.append(os.path.join('D:/project_youngk/main_character/', i, f))
                 k = k+1
         count2.append(k)    #폴더 내 이미지 수(등장횟수)
         if count2[t]!=0 :    
@@ -242,7 +236,7 @@ def makeTimeline():
     file.close()
     
     #cv2.rectangle(img, tuple_add((0,0), (10, 10)), tuple_add((img_w - 1, img_h - 1), (-10, -200)), blue, thickness)
-    for a in os.listdir('C:/project_youngk/main_character/'):
+    for a in os.listdir('D:/project_youngk/main_character/'):
         character_path1.append(os.path.join(character_path,a))
     for k in range(len(character_path1)):
         character_path = character_path1[k]+'/';
@@ -254,7 +248,6 @@ def makeTimeline():
         except: #빈 폴더가 아니면
             for i in os.listdir(character_path):
                 character_emerge.append(i)
-            #print(str(len(character_emerge))+str(" a ")+str(character_count))
             
             if(len(character_emerge)>=character_count):
                 im = Image.open(character_path+character_emerge[0]).resize((100,100), Image.ANTIALIAS)      
@@ -267,7 +260,7 @@ def makeTimeline():
                             check_end = frameNum[j+1]
                             ratio_start = int(float((width/runningTime)*check_start))
                             ratio_end = int(float((width/runningTime)*check_end))
-                            print(str(ratio_start)+str(ratio_end)+str(k))
+                            
                           
                             
                             canvas.create_rectangle(110+ratio_start,10+count*(100), 100+ratio_end,100+count*(100), fill = 'red')
@@ -277,7 +270,6 @@ def makeTimeline():
     root.mainloop()
     # cv2.imshow("drawing", img)
     # cv2.waitKey(0)
-    print("타임라인")    
 
                 
                 
@@ -316,8 +308,6 @@ def compare(input_images, model, image_path, image_size, margin, gpu_memory_frac
             
             for i in range(len(input_images)):
                 dist_list = []
-                # print(len(input_images))
-                # print(len(emb))
                         
                 for j in range(len(input_images), len(emb)):
                     dist = spatial.distance.cosine(emb[i,:], emb[j,:])  
@@ -348,7 +338,6 @@ def compare(input_images, model, image_path, image_size, margin, gpu_memory_frac
                     person_path = os.path.abspath(os.path.join(image_files[dist_index], '..'))
                     person_name = person_path.split('/')[-1]
                     pil_image = Image.fromarray(input_images[i])  
-                    print(person_name)
                     pil_image.save(person_name+"/"+str(video_name[i])+".jpg")
                 else :
                     print("패스")
@@ -440,10 +429,10 @@ def findMedoid():
     
     medoid_img = [] #중앙 이미지 저장
     folder_name =[] #각 캐릭터 저장되어있는 폴더 이름
-    fold_path = 'C:/project_youngk/main_character/'
+    fold_path = 'D:/project_youngk/main_character/'
     tmp_path = []
     tmp_foldpath = []
-    for i in os.listdir('C:/project_youngk/main_character/'):
+    for i in os.listdir('D:/project_youngk/main_character/'):
         folder_name.append(os.path.join(fold_path, i))
     with tf.Graph().as_default():
         with tf.Session() as sess:
@@ -458,7 +447,6 @@ def findMedoid():
                 image_files = []
                 image_path = []
                 for i in os.listdir(medoid_path):   #medoid찾을 path 즉, 각 폴더 경로에 있는 사진들
-                    print(i)
                     image_path.append(os.path.join(medoid_path, i))
                     img = cv2.imread(os.path.join(medoid_path, i))
                                 
@@ -473,11 +461,8 @@ def findMedoid():
                     med_num = 0
                     for k in range(len(image_files)):
                         dist_list = []
-                            # print(len(input_images))
-                                # print(len(emb))
                         for j in range(len(image_files), len(emb)):
                             dist = spatial.distance.cosine(emb[k,:], emb[j,:])
-                                    # print("@"+str(j))
                             dist_list.append(dist)
                         sum = 0
                         med_min = len(dist_list)
@@ -499,8 +484,6 @@ def findMedoid():
 def folder_merge(medoid_img, tmp_path, tmp_foldpath, model):
     
     images = load_and_align_data2(medoid_img, 160, 44, 1.0)
-    print("medoid_img : ")
-    print(medoid_img)
     del_list = []
     with tf.Graph().as_default():
         with tf.Session() as sess:
@@ -563,7 +546,7 @@ def find_main_character(image_path):
             main_character.append(str(os.listdir(image_path)[i]))
 
 def findRelationship(file):
-    f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
+    f = open("D:/project_youngk/data/"+file+"/"+file+".txt", 'r')
     lines = f.readlines()
     
     for i in range(3, len(lines)):
@@ -584,7 +567,7 @@ def findRelationship(file):
 if __name__ == '__main__':
     save_i_keyframes(filepath+filename)
     findMedoid()
-    find_main_character('C:/project_youngk/main_character/')
+    find_main_character('D:/project_youngk/main_character/')
     makeTimeline()
     saveTimeline()
-    findRelationship(filename)
+    #findRelationship(filename)

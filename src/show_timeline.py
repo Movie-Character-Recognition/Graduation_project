@@ -52,7 +52,7 @@ def makeTimeline(file):
     
     
     ##
-    f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
+    f = open("D:/project_youngk/data/"+file+"/"+file+".txt", 'r')
 
 
     tmp = f.readline()
@@ -131,7 +131,7 @@ def makeTimeline(file):
                         check_end = (int)(frameNum[j+1])
                         ratio_start = int(float((width__/(int)(lastFrame))*check_start))
                         ratio_end = int(float((width__/(int)(lastFrame))*check_end))
-                        thumbnail = Image.open("C:/project_youngk/data/"+file+"/"+character_emerge[1]).resize((100,100), Image.ANTIALIAS)
+                        thumbnail = Image.open("D:/project_youngk/data/"+file+"/"+character_emerge[1]).resize((100,100), Image.ANTIALIAS)
                         im.append(ImageTk.PhotoImage(thumbnail))
                         canvas.create_image(50, count*110+80, image=im[len(im)-1], anchor='nw')
                         canvas.create_rectangle(260+ratio_start, count*110+80, 250+ratio_end, 100+count*(110)+80, fill = 'red')
@@ -144,7 +144,7 @@ def makeTimeline(file):
     
     list_count = findRelationship(file)
 
-    f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
+    f = open("D:/project_youngk/data/"+file+"/"+file+".txt", 'r')
     lines = f.readlines()
     
     char_line = lines[1].split()
@@ -156,8 +156,8 @@ def makeTimeline(file):
     for i in range(len(list_count)):
         if (list_count[i][3] == 0):
             count = count + 1
-            thumbnail1 = Image.open("C:/project_youngk/data/"+file+"/"+list_count[i][0]).resize((100,100), Image.ANTIALIAS)
-            thumbnail2 = Image.open("C:/project_youngk/data/"+file+"/"+list_count[i][1]).resize((100,100), Image.ANTIALIAS)
+            thumbnail1 = Image.open("D:/project_youngk/data/"+file+"/"+list_count[i][0]).resize((100,100), Image.ANTIALIAS)
+            thumbnail2 = Image.open("D:/project_youngk/data/"+file+"/"+list_count[i][1]).resize((100,100), Image.ANTIALIAS)
             im.append(ImageTk.PhotoImage(thumbnail1))
             im.append(ImageTk.PhotoImage(thumbnail2))
             canvas.create_image(0, count*110+80, image=im[len(im)-2], anchor='nw')
@@ -182,7 +182,7 @@ def makeTimeline(file):
 
 
 def findRelationship(file):
-    f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
+    f = open("D:/project_youngk/data/"+file+"/"+file+".txt", 'r')
     lines = f.readlines()
     
     count_array = []
@@ -217,7 +217,7 @@ if __name__ == '__main__':
    
   
     ##버튼
-    button = tk.Button(root_, text="역도요정 김복주", command=lambda: makeTimeline("vtest5.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
+    button = tk.Button(root_, text="제 3의 매력", command=lambda: makeTimeline("vtest5.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
     button2 = tk.Button(root_, text="에이틴", command=lambda: makeTimeline("vtest2.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
     button.pack()
     button2.pack()
