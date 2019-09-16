@@ -11,6 +11,7 @@ import numpy as np
 
 import tkinter as tk
 import os
+file_name = ''
 def makeTimeline(file):
     os.system(r'"C:/project_youngk/src/scrolltest2.py"')
 if __name__ == '__main__':
@@ -24,7 +25,7 @@ if __name__ == '__main__':
   
     ##버튼
     button = tk.Button(root_, text="역도요정 김복주", command=lambda: makeTimeline("vtest8.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
-    button2 = tk.Button(root_, text="에이틴", command=lambda: makeTimeline("vtest2.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
+    button2 = tk.Button(root_, text="라라랜드", command=lambda: makeTimeline("vtest18.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
     button.pack()
     button2.pack()
     root_.mainloop()

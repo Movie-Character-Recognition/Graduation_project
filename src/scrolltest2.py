@@ -41,9 +41,7 @@ def findRelationship(file):
 
 def data(canvas,frame):
     #root = tk.Tk()
-    file = "vtest8.mp4"
-
-    
+    file = "vtest44.mp4"
     ##
     f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
 
@@ -107,7 +105,7 @@ def data(canvas,frame):
     for i in lines:
         character_emerge = i.split()       
         if((len(character_emerge)-1)>=(float)(character_count[0])):
-            for i in range(1,len(character_emerge)):
+            for i in range(0,len(character_emerge)):
                 for j in range(0,len(frameNum)-1):
                     tmp = character_emerge[i].split('_')
                     if(str(frameNum[j])==str(tmp[0])):
@@ -149,7 +147,7 @@ def data(canvas,frame):
             canvas.create_image(100, count*110+80, image=im[len(im)-1], anchor='nw')
             
             #타임바그리기
-        for j in range(len(char_line)):
+        for j in range(len(char_line)-1):
             tmp = list_count[i][2].split('_')
             if (str(char_line[j]) == str(tmp[0])):
                 width__ = width_ - 255
@@ -169,7 +167,7 @@ def myfunction(event):
     
     canvas.configure(scrollregion=canvas.bbox("all"),width=1150,height=700)
 
-root=tk.Tk()
+root=tk.Toplevel()
 sizex = 1200
 sizey = 2000
 width = 500
@@ -180,7 +178,6 @@ root.wm_geometry("%dx%d+%d+%d" % (sizex, sizey, posx, posy))
 
 myframe=tk.Frame(root,relief=tk.GROOVE,width=500,height=1000,bd=1)
 myframe.place(x=10,y=10)
-
 canvas=tk.Canvas(myframe)
 frame=tk.Frame(canvas)
 myscrollbar=tk.Scrollbar(myframe,orient="vertical",command=canvas.yview)
