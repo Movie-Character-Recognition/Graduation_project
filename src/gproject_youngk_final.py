@@ -26,10 +26,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
 from PIL import ImageTk, Image
-
-
 #import face_recognition
 
 from scipy import misc, spatial
@@ -37,18 +34,16 @@ import tensorflow as tf
 import cv2
 import subprocess
 import numpy as np
-
 import os
 import copy
-
 import facenet
 import align.detect_face
 import shutil
 #import PIL.Image as pilimg
 from tkinter import Canvas
 import tkinter as tk 
-filepath = 'D:/project_youngk/video/'
-filename = 'vtest5.mp4'
+filepath = 'C:/project_youngk/video/'
+filename = 'vtest4.mp4'
 
 frameNum = []
 width = 640
@@ -99,8 +94,8 @@ def save_i_keyframes(video_fn):
     margin = 44
     gpu_memory_fraction = 1.0
     
-    os.mkdir("D:/project_youngk/data/"+filename)
-    f = open("D:/project_youngk/data/"+filename+"/"+filename+".txt", 'w')
+    os.mkdir("C:/project_youngk/data/"+filename)
+    f = open("C:/project_youngk/data/"+filename+"/"+filename+".txt", 'w')
     f.write(str(frame_times))
     f.write('\n')
     
@@ -143,7 +138,7 @@ def save_i_keyframes(video_fn):
                     aligned = misc.imresize(cropped, (image_size, image_size), interp='bilinear')
                     prewhitened = facenet.prewhiten(aligned)
                     face_images.append(cropped)
-                    cv2.imwrite("D:/project_youngk/keyframe/"+str(frame_no) + "_"+str(person_num)+".jpg", cropped)
+                    cv2.imwrite("C:/project_youngk/keyframe/"+str(frame_no) + "_"+str(person_num)+".jpg", cropped)
                     video_name.append(str(frame_no) + "_"+str(person_num))
                     person_num = person_num + 1
             ###
@@ -153,7 +148,7 @@ def save_i_keyframes(video_fn):
 
         #cv2.imshow('face', face_images[0])
         ##이미지 비교
-        image_path = 'D:/project_youngk/main_character/'
+        image_path = 'C:/project_youngk/main_character/'
         #images = load_and_align_data(face_images, [image_path], image_size, margin, gpu_memory_fraction)
         compare(face_images, model, image_path, image_size, margin, gpu_memory_fraction, video_name)
         #findMedoid()
@@ -168,29 +163,29 @@ def tuple_add(x, y):
     return tuple(np.add(x, y))
 
 def saveTimeline():
-    f = open("D:/project_youngk/data/"+filename+"/"+filename+".txt", 'a')
+    f = open("C:/project_youngk/data/"+filename+"/"+filename+".txt", 'a')
     
     runningTime = frameNum[len(frameNum)-1]
     f.write(str(runningTime))
     f.write('\n')
     
 
-    for i in os.listdir('D:/project_youngk/main_character/'):
+    for i in os.listdir('C:/project_youngk/main_character/'):
         
         if i in main_character:
             f.write(str(i))
             f.write(" ")
             img_list = []
-            path = 'D:/project_youngk/main_character/'+str(i)+'/'
+            path = 'C:/project_youngk/main_character/'+str(i)+'/'
             
             for j in os.listdir(path):
                 f.write(str(j))
                 f.write(" ")
                 img_list.append(str(j))
             
-            img = cv2.imread('D:/project_youngk/main_character/'+str(i)+'/'+img_list[0])
+            img = cv2.imread('C:/project_youngk/main_character/'+str(i)+'/'+img_list[0])
             img2 = Image.fromarray(img)
-            img2.save("D:/project_youngk/data/"+str(filename)+"/"+img_list[0])
+            img2.save("C:/project_youngk/data/"+str(filename)+"/"+img_list[0])
             f.write('\n')
     
     f.close()
@@ -209,7 +204,7 @@ def makeTimeline():
     runningTime = frameNum[len(frameNum)-1]
 
     character_path1 = []
-    character_path = 'D:/project_youngk/main_character/'
+    character_path = 'C:/project_youngk/main_character/'
     character_emerge = []
     character_count = 0
     count = 0;
@@ -217,14 +212,14 @@ def makeTimeline():
     image_files = []
     count2 = []
     t = 0
-    file = open("D:/project_youngk/data/"+filename+"/"+filename+".txt", 'a')
-    for i in os.listdir('D:/project_youngk/main_character/'):
+    file = open("C:/project_youngk/data/"+filename+"/"+filename+".txt", 'a')
+    for i in os.listdir('C:/project_youngk/main_character/'):
         k = 0
         if not i == '.DS_Store':
-            for f in os.listdir(os.path.join('D:/project_youngk/main_character/', i)):
+            for f in os.listdir(os.path.join('C:/project_youngk/main_character/', i)):
                 ext = os.path.splitext(f)[1]
                 if ext == '.jpg' or ext == '.jpeg' or ext == '.png':
-                     image_files.append(os.path.join('D:/project_youngk/main_character/', i, f))
+                     image_files.append(os.path.join('C:/project_youngk/main_character/', i, f))
                 k = k+1
         count2.append(k)    #폴더 내 이미지 수(등장횟수)
         if count2[t]!=0 :    
@@ -236,7 +231,7 @@ def makeTimeline():
     file.close()
     
     #cv2.rectangle(img, tuple_add((0,0), (10, 10)), tuple_add((img_w - 1, img_h - 1), (-10, -200)), blue, thickness)
-    for a in os.listdir('D:/project_youngk/main_character/'):
+    for a in os.listdir('C:/project_youngk/main_character/'):
         character_path1.append(os.path.join(character_path,a))
     for k in range(len(character_path1)):
         character_path = character_path1[k]+'/';
@@ -314,7 +309,7 @@ def compare(input_images, model, image_path, image_size, margin, gpu_memory_frac
                           
                     dist_list.append(dist)
                                  
-                if (len(dist_list) == 0 or min(dist_list) > 0.3):
+                if (len(dist_list) == 0 or min(dist_list) > 0.2):
                     os.mkdir(image_path + str(i))
                     pil_image = Image.fromarray(input_images[i])
                     pil_image.save(image_path+str(i)+"/"+str(video_name[i])+".jpg") 
@@ -333,7 +328,7 @@ def compare(input_images, model, image_path, image_size, margin, gpu_memory_frac
                     emb = sess.run(embeddings, feed_dict=feed_dict)
                                 
                        
-                elif (min(dist_list)<=0.3):
+                elif (min(dist_list)<=0.2):
                     dist_index = dist_list.index(min(dist_list))
                     person_path = os.path.abspath(os.path.join(image_files[dist_index], '..'))
                     person_name = person_path.split('/')[-1]
@@ -429,10 +424,12 @@ def findMedoid():
     
     medoid_img = [] #중앙 이미지 저장
     folder_name =[] #각 캐릭터 저장되어있는 폴더 이름
-    fold_path = 'D:/project_youngk/main_character/'
+    fold_path = 'C:/project_youngk/main_character/'
     tmp_path = []
     tmp_foldpath = []
-    for i in os.listdir('D:/project_youngk/main_character/'):
+    
+    med_min = 10000
+    for i in os.listdir('C:/project_youngk/main_character/'):
         folder_name.append(os.path.join(fold_path, i))
     with tf.Graph().as_default():
         with tf.Session() as sess:
@@ -464,27 +461,26 @@ def findMedoid():
                         for j in range(len(image_files), len(emb)):
                             dist = spatial.distance.cosine(emb[k,:], emb[j,:])
                             dist_list.append(dist)
-                        sum = 0
-                        med_min = len(dist_list)
+                        sum = 0 #
                         for l in dist_list:
                             sum = sum + l
-                                    
+
                         if (sum <= med_min) :
                             med_min = sum
                             med_num = k
                     medoid_img.append(image_files[med_num])  #중앙 이미지 자체 저장
                     tmp_path.append(image_path[med_num])    #중앙 이미지의 path 저장
-                    tmp_foldpath.append(medoid_path)
+                    tmp_foldpath.append(medoid_path)    #중앙 이미지가 저장되어 있는 폴더의 path
                     
-    folder_merge(medoid_img, tmp_path, tmp_foldpath, model)
+    folder_merge(medoid_img, tmp_path, tmp_foldpath, model) 
     
 
 
     
 def folder_merge(medoid_img, tmp_path, tmp_foldpath, model):
-    
     images = load_and_align_data2(medoid_img, 160, 44, 1.0)
     del_list = []
+    del_img = []
     with tf.Graph().as_default():
         with tf.Session() as sess:
             facenet.load_model(model)
@@ -496,22 +492,28 @@ def folder_merge(medoid_img, tmp_path, tmp_foldpath, model):
             emb = sess.run(embeddings, feed_dict=feed_dict) 
             
             for i in range(len(medoid_img)):
-                dist_list = []
+                #dist_list = []
                 k = 0
+                check = 0
                 for j in range(i+1, len(medoid_img)):
-                    dist = spatial.distance.cosine(emb[i,:], emb[j,:])  
-                              
-                    dist_list.append(dist)
                     
-                    if (dist_list[k] <= 0.3): #import shutil해야함
-                        print(str(tmp_path[i])+str(tmp_path[j])+"는 동일인물");
-                        for l in os.listdir(tmp_foldpath[j]):
-                            shutil.copy(tmp_foldpath[j]+l, tmp_foldpath[i])
-                        del_list.append(tmp_foldpath[j])
-                        
-                    else:
-                        print(str(tmp_path[i])+str(tmp_path[j])+"는 다른인물"); 
-                    k=k+1
+                    for m in range(len(del_img)):
+                        if (j== m):
+                            check = 1
+                    if (check == 0):
+                        dist = spatial.distance.cosine(emb[i,:], emb[j,:])  
+                                              
+                                    #dist_list.append(dist)
+                                    
+                        if (dist <= 0.4): #import shutil해야함
+                            print(str(tmp_path[i])+str(tmp_path[j])+"는 동일인물");
+                            for l in os.listdir(tmp_foldpath[j]):
+                                shutil.copy(tmp_foldpath[j]+l, tmp_foldpath[i])
+                            del_list.append(tmp_foldpath[j])
+                            del_img.append(j)
+                        else:
+                            print(str(tmp_path[i])+str(tmp_path[j])+"는 다른인물"); 
+                        k=k+1
                     
     for i in range(len(del_list)):
         try:
@@ -546,7 +548,7 @@ def find_main_character(image_path):
             main_character.append(str(os.listdir(image_path)[i]))
 
 def findRelationship(file):
-    f = open("D:/project_youngk/data/"+file+"/"+file+".txt", 'r')
+    f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
     lines = f.readlines()
     
     for i in range(3, len(lines)):
@@ -567,7 +569,7 @@ def findRelationship(file):
 if __name__ == '__main__':
     save_i_keyframes(filepath+filename)
     findMedoid()
-    find_main_character('D:/project_youngk/main_character/')
+    find_main_character('C:/project_youngk/main_character/')
     makeTimeline()
     saveTimeline()
     #findRelationship(filename)
