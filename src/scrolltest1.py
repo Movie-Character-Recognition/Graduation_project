@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Aug 27 11:58:47 2019
-
 @author: kdhee
 """
 
@@ -69,22 +68,47 @@ def data(canvas,frame):
     canvas.create_line(width_,40, width_, 60, width=5)  #타임바 끝
     canvas.create_text(225, 50, text="00:00")
 
-    timebar =  int(runningTime) / 30
+    print("running")
+    print(runningTime)
+    timebar =  int(runningTime) / 300
     timebar = int(timebar)
     
-
+    print("timebar")
+    print(timebar)
     
     ######
-    timeleft = int(runningTime) % 30
-
+    timeleft = int(runningTime) % 300
+    print("timeleft")
+    print(timeleft)
     
-    timeSpace = (width_-255)  / (timebar + timeleft/30)
+    timeSpace = (width_-255)  / (timebar + timeleft/300)
     
-    min_n = 0
+    min_n = 5
     minu = "0"+str(min_n)
-
+    
+    hour = 0
+    houru = "0"+str(hour)
+    
     for i in range(1, timebar+1):
-
+        canvas.create_line(255+timeSpace*i,40, 255+timeSpace*i, 60, width=2)
+        if (min_n == 0 or min_n == 5):
+            canvas.create_text(255+timeSpace*i, 30, text=houru+":"+"0"+str(min_n))
+        else :
+            canvas.create_text(255+timeSpace*i, 30, text=houru+":"+str(min_n))
+        min_n = min_n + 5
+        if ( min_n == 60 ):
+            min_n = 0
+            hour = hour + 1
+            houru = "0" + str(hour)
+    
+    if ((int((int(runningTime)%3600)/60)) < 10):
+        canvas.create_text(width_+30, 50, text="0"+str(int(runningTime/3600))+":0"+str(int((int(runningTime)%3600)/60)))    
+    else :
+        canvas.create_text(width_+30, 50, text="0"+str(int(runningTime/3600))+":"+str(int((int(runningTime)%3600)/60))) 
+    '''   
+    for i in range(1, timebar+1):
+        print("line_num")
+        print(i)
         canvas.create_line(255+timeSpace*i,40, 255+timeSpace*i, 60, width=2)
         
         if ( i % 2 == 0):
@@ -96,6 +120,7 @@ def data(canvas,frame):
     
    
     canvas.create_text(width_+30, 50, text=str(int(runningTime/60))+":"+str(int(runningTime)%60))
+    '''
   
     
     
