@@ -52,7 +52,7 @@ def makeTimeline(file):
     
     
     ##
-    f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
+    f = open("D:/project_youngk/data/"+file+"/"+file+".txt", 'r')
 
 
     tmp = f.readline()
@@ -83,22 +83,42 @@ def makeTimeline(file):
     
     print("running")
     print(runningTime)
-    timebar =  int(runningTime) / 30
+    timebar =  int(runningTime) / 300
     timebar = int(timebar)
     
     print("timebar")
     print(timebar)
     
     ######
-    timeleft = int(runningTime) % 30
+    timeleft = int(runningTime) % 300
     print("timeleft")
     print(timeleft)
     
-    timeSpace = (width_-255)  / (timebar + timeleft/30)
+    timeSpace = (width_-255)  / (timebar + timeleft/300)
     
-    min_n = 0
+    min_n = 5
     minu = "0"+str(min_n)
-
+    
+    hour = 0
+    houru = "0"+str(hour)
+    
+    for i in range(1, timebar+1):
+        canvas.create_line(255+timeSpace*i,40, 255+timeSpace*i, 60, width=2)
+        if (min_n == 0 or min_n == 5):
+            canvas.create_text(255+timeSpace*i, 30, text=houru+":"+"0"+str(min_n))
+        else :
+            canvas.create_text(255+timeSpace*i, 30, text=houru+":"+str(min_n))
+        min_n = min_n + 5
+        if ( min_n == 60 ):
+            min_n = 0
+            hour = hour + 1
+            houru = "0" + str(hour)
+    
+    if ((int((int(runningTime)%3600)/60)) < 10):
+        canvas.create_text(width_+30, 50, text="0"+str(int(runningTime/3600))+":0"+str(int((int(runningTime)%3600)/60)))    
+    else :
+        canvas.create_text(width_+30, 50, text="0"+str(int(runningTime/3600))+":"+str(int((int(runningTime)%3600)/60))) 
+    '''   
     for i in range(1, timebar+1):
         print("line_num")
         print(i)
@@ -113,7 +133,7 @@ def makeTimeline(file):
     
    
     canvas.create_text(width_+30, 50, text=str(int(runningTime/60))+":"+str(int(runningTime)%60))
-  
+    '''
     
     
     lines = f.readlines()
@@ -131,7 +151,7 @@ def makeTimeline(file):
                         check_end = (int)(frameNum[j+1])
                         ratio_start = int(float((width__/(int)(lastFrame))*check_start))
                         ratio_end = int(float((width__/(int)(lastFrame))*check_end))
-                        thumbnail = Image.open("C:/project_youngk/data/"+file+"/"+character_emerge[1]).resize((100,100), Image.ANTIALIAS)
+                        thumbnail = Image.open("D:/project_youngk/data/"+file+"/"+character_emerge[1]).resize((100,100), Image.ANTIALIAS)
                         im.append(ImageTk.PhotoImage(thumbnail))
                         canvas.create_image(50, count*110+80, image=im[len(im)-1], anchor='nw')
                         canvas.create_rectangle(260+ratio_start, count*110+80, 250+ratio_end, 100+count*(110)+80, fill = 'red')
@@ -144,7 +164,7 @@ def makeTimeline(file):
     
     list_count = findRelationship(file)
 
-    f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
+    f = open("D:/project_youngk/data/"+file+"/"+file+".txt", 'r')
     lines = f.readlines()
     
     char_line = lines[1].split()
@@ -156,8 +176,8 @@ def makeTimeline(file):
     for i in range(len(list_count)):
         if (list_count[i][3] == 0):
             count = count + 1
-            thumbnail1 = Image.open("C:/project_youngk/data/"+file+"/"+list_count[i][0]).resize((100,100), Image.ANTIALIAS)
-            thumbnail2 = Image.open("C:/project_youngk/data/"+file+"/"+list_count[i][1]).resize((100,100), Image.ANTIALIAS)
+            thumbnail1 = Image.open("D:/project_youngk/data/"+file+"/"+list_count[i][0]).resize((100,100), Image.ANTIALIAS)
+            thumbnail2 = Image.open("D:/project_youngk/data/"+file+"/"+list_count[i][1]).resize((100,100), Image.ANTIALIAS)
             im.append(ImageTk.PhotoImage(thumbnail1))
             im.append(ImageTk.PhotoImage(thumbnail2))
             canvas.create_image(0, count*110+80, image=im[len(im)-2], anchor='nw')
@@ -182,7 +202,7 @@ def makeTimeline(file):
 
 
 def findRelationship(file):
-    f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
+    f = open("D:/project_youngk/data/"+file+"/"+file+".txt", 'r')
     lines = f.readlines()
     
     count_array = []
@@ -201,8 +221,8 @@ def findRelationship(file):
                     if (tmp1 == tmp2):
                         count_array.append([l1[1], l2[1], l1[k], count])
                         count = count + 1
-                        print(l1[1]+"과"+l2[1]+"는 "+str(count)+"번 동시 등장")
-                        print(count_array)
+                        #print(l1[1]+"과"+l2[1]+"는 "+str(count)+"번 동시 등장")
+                        #print(count_array)
     f.close()
     return count_array
 
@@ -217,10 +237,10 @@ if __name__ == '__main__':
    
   
     ##버튼
-    button = tk.Button(root_, text="역도요정 김복주", command=lambda: makeTimeline("vtest5.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
-    button2 = tk.Button(root_, text="에이틴", command=lambda: makeTimeline("vtest2.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
+    button = tk.Button(root_, text="제 3의 매력", command=lambda: makeTimeline("vtest18.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
+    button2 = tk.Button(root_, text="에이틴", command=lambda: makeTimeline("vtest4.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
     button.pack()
     button2.pack()
     root_.mainloop()
     
-    #makeTimeline("vtest2.mp4")
+    #makeTimeline("vtest2.mp4")7

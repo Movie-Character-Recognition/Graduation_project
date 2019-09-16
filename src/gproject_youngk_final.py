@@ -26,11 +26,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-from sklearn.cluster import DBSCAN
-from tkinter import Tk, Canvas
 from PIL import ImageTk, Image
-
-from PIL import Image
 #import face_recognition
 
 from scipy import misc, spatial
@@ -38,18 +34,16 @@ import tensorflow as tf
 import cv2
 import subprocess
 import numpy as np
-import sys
 import os
 import copy
-import argparse
 import facenet
 import align.detect_face
 import shutil
 #import PIL.Image as pilimg
-import tkinter as tk
-from PIL import ImageTk, Image
+from tkinter import Canvas
+import tkinter as tk 
 filepath = 'C:/project_youngk/video/'
-filename = 'vtest5.mp4'
+filename = 'vtest4.mp4'
 
 frameNum = []
 width = 640
@@ -85,12 +79,8 @@ def get_frame_types(video_fn):
     for i in range(len(frames)):
         if frames[i].find('/') <= -1:
             tmp = frames[i]
-            print(tmp)
             frame_times.append(tmp.replace('pkt_pts_time=',''))
             
-    print("frame_times")
-    print(frame_times)
-   
     return zip(range(len(frame_types)), frame_types), frame_times[len(frame_times)-1]
 
 def save_i_keyframes(video_fn):
@@ -127,7 +117,6 @@ def save_i_keyframes(video_fn):
             outname = 'key'+str(frame_no)+'.jpg'
             frameNum.append(frame_no)
             cv2.imwrite("../keyframe/"+outname, frame)
-            print ('Saved: '+outname)
             f.write(str(frame_no)+str(" "))
             img = cv2.imread("../keyframe/"+'key'+str(frame_no)+'.jpg')
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -149,7 +138,7 @@ def save_i_keyframes(video_fn):
                     aligned = misc.imresize(cropped, (image_size, image_size), interp='bilinear')
                     prewhitened = facenet.prewhiten(aligned)
                     face_images.append(cropped)
-                    cv2.imwrite("C:project_youngk/keyframe/"+str(frame_no) + "_"+str(person_num)+".jpg", cropped)
+                    cv2.imwrite("C:/project_youngk/keyframe/"+str(frame_no) + "_"+str(person_num)+".jpg", cropped)
                     video_name.append(str(frame_no) + "_"+str(person_num))
                     person_num = person_num + 1
             ###
@@ -254,7 +243,6 @@ def makeTimeline():
         except: #빈 폴더가 아니면
             for i in os.listdir(character_path):
                 character_emerge.append(i)
-            #print(str(len(character_emerge))+str(" a ")+str(character_count))
             
             if(len(character_emerge)>=character_count):
                 im = Image.open(character_path+character_emerge[0]).resize((100,100), Image.ANTIALIAS)      
@@ -267,7 +255,7 @@ def makeTimeline():
                             check_end = frameNum[j+1]
                             ratio_start = int(float((width/runningTime)*check_start))
                             ratio_end = int(float((width/runningTime)*check_end))
-                            print(str(ratio_start)+str(ratio_end)+str(k))
+                            
                           
                             
                             canvas.create_rectangle(110+ratio_start,10+count*(100), 100+ratio_end,100+count*(100), fill = 'red')
@@ -277,7 +265,6 @@ def makeTimeline():
     root.mainloop()
     # cv2.imshow("drawing", img)
     # cv2.waitKey(0)
-    print("타임라인")    
 
                 
                 
@@ -316,15 +303,13 @@ def compare(input_images, model, image_path, image_size, margin, gpu_memory_frac
             
             for i in range(len(input_images)):
                 dist_list = []
-                # print(len(input_images))
-                # print(len(emb))
                         
                 for j in range(len(input_images), len(emb)):
                     dist = spatial.distance.cosine(emb[i,:], emb[j,:])  
                           
                     dist_list.append(dist)
                                  
-                if (len(dist_list) == 0 or min(dist_list) > 0.3):
+                if (len(dist_list) == 0 or min(dist_list) > 0.2):
                     os.mkdir(image_path + str(i))
                     pil_image = Image.fromarray(input_images[i])
                     pil_image.save(image_path+str(i)+"/"+str(video_name[i])+".jpg") 
@@ -343,12 +328,11 @@ def compare(input_images, model, image_path, image_size, margin, gpu_memory_frac
                     emb = sess.run(embeddings, feed_dict=feed_dict)
                                 
                        
-                elif (min(dist_list)<=0.3):
+                elif (min(dist_list)<=0.2):
                     dist_index = dist_list.index(min(dist_list))
                     person_path = os.path.abspath(os.path.join(image_files[dist_index], '..'))
                     person_name = person_path.split('/')[-1]
                     pil_image = Image.fromarray(input_images[i])  
-                    print(person_name)
                     pil_image.save(person_name+"/"+str(video_name[i])+".jpg")
                 else :
                     print("패스")
@@ -443,6 +427,8 @@ def findMedoid():
     fold_path = 'C:/project_youngk/main_character/'
     tmp_path = []
     tmp_foldpath = []
+    
+    med_min = 10000
     for i in os.listdir('C:/project_youngk/main_character/'):
         folder_name.append(os.path.join(fold_path, i))
     with tf.Graph().as_default():
@@ -458,7 +444,6 @@ def findMedoid():
                 image_files = []
                 image_path = []
                 for i in os.listdir(medoid_path):   #medoid찾을 path 즉, 각 폴더 경로에 있는 사진들
-                    print(i)
                     image_path.append(os.path.join(medoid_path, i))
                     img = cv2.imread(os.path.join(medoid_path, i))
                                 
@@ -473,35 +458,29 @@ def findMedoid():
                     med_num = 0
                     for k in range(len(image_files)):
                         dist_list = []
-                            # print(len(input_images))
-                                # print(len(emb))
                         for j in range(len(image_files), len(emb)):
                             dist = spatial.distance.cosine(emb[k,:], emb[j,:])
-                                    # print("@"+str(j))
                             dist_list.append(dist)
-                        sum = 0
-                        med_min = len(dist_list)
+                        sum = 0 #
                         for l in dist_list:
                             sum = sum + l
-                                    
+
                         if (sum <= med_min) :
                             med_min = sum
                             med_num = k
                     medoid_img.append(image_files[med_num])  #중앙 이미지 자체 저장
                     tmp_path.append(image_path[med_num])    #중앙 이미지의 path 저장
-                    tmp_foldpath.append(medoid_path)
+                    tmp_foldpath.append(medoid_path)    #중앙 이미지가 저장되어 있는 폴더의 path
                     
-    folder_merge(medoid_img, tmp_path, tmp_foldpath, model)
+    folder_merge(medoid_img, tmp_path, tmp_foldpath, model) 
     
 
 
     
 def folder_merge(medoid_img, tmp_path, tmp_foldpath, model):
-    
     images = load_and_align_data2(medoid_img, 160, 44, 1.0)
-    print("medoid_img : ")
-    print(medoid_img)
     del_list = []
+    del_img = []
     with tf.Graph().as_default():
         with tf.Session() as sess:
             facenet.load_model(model)
@@ -513,22 +492,28 @@ def folder_merge(medoid_img, tmp_path, tmp_foldpath, model):
             emb = sess.run(embeddings, feed_dict=feed_dict) 
             
             for i in range(len(medoid_img)):
-                dist_list = []
+                #dist_list = []
                 k = 0
+                check = 0
                 for j in range(i+1, len(medoid_img)):
-                    dist = spatial.distance.cosine(emb[i,:], emb[j,:])  
-                              
-                    dist_list.append(dist)
                     
-                    if (dist_list[k] <= 0.3): #import shutil해야함
-                        print(str(tmp_path[i])+str(tmp_path[j])+"는 동일인물");
-                        for l in os.listdir(tmp_foldpath[j]):
-                            shutil.copy(tmp_foldpath[j]+l, tmp_foldpath[i])
-                        del_list.append(tmp_foldpath[j])
-                        
-                    else:
-                        print(str(tmp_path[i])+str(tmp_path[j])+"는 다른인물"); 
-                    k=k+1
+                    for m in range(len(del_img)):
+                        if (j== m):
+                            check = 1
+                    if (check == 0):
+                        dist = spatial.distance.cosine(emb[i,:], emb[j,:])  
+                                              
+                                    #dist_list.append(dist)
+                                    
+                        if (dist <= 0.4): #import shutil해야함
+                            print(str(tmp_path[i])+str(tmp_path[j])+"는 동일인물");
+                            for l in os.listdir(tmp_foldpath[j]):
+                                shutil.copy(tmp_foldpath[j]+l, tmp_foldpath[i])
+                            del_list.append(tmp_foldpath[j])
+                            del_img.append(j)
+                        else:
+                            print(str(tmp_path[i])+str(tmp_path[j])+"는 다른인물"); 
+                        k=k+1
                     
     for i in range(len(del_list)):
         try:
@@ -587,4 +572,4 @@ if __name__ == '__main__':
     find_main_character('C:/project_youngk/main_character/')
     makeTimeline()
     saveTimeline()
-    findRelationship(filename)
+    #findRelationship(filename)
