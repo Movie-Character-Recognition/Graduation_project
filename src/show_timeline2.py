@@ -12,8 +12,14 @@ import numpy as np
 import tkinter as tk
 import os
 file_name = ''
-def makeTimeline(file):
+def makeTimeline1():
+    os.system(r'"C:/project_youngk/src/scrolltest1.py"')
+    
+def makeTimeline2():
     os.system(r'"C:/project_youngk/src/scrolltest2.py"')
+    
+def makeTimeline3():
+    os.system(r'"C:/project_youngk/src/scrolltest3.py"')
 if __name__ == '__main__':
    # makeTimeline("vtest4.mp4")
        
@@ -24,8 +30,10 @@ if __name__ == '__main__':
    
   
     ##버튼
-    button = tk.Button(root_, text="역도요정 김복주", command=lambda: makeTimeline("vtest8.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
-    button2 = tk.Button(root_, text="라라랜드", command=lambda: makeTimeline("vtest18.mp4"),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
+    button = tk.Button(root_, text="에이틴", command=lambda: makeTimeline1(),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
+    button2 = tk.Button(root_, text="라라랜드", command=lambda: makeTimeline2(),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
+    button3 = tk.Button(root_, text="당신이 잠든 사이에", command=lambda: makeTimeline2(),overrelief="solid", width=15, repeatdelay=1000, repeatinterval=100)
     button.pack()
     button2.pack()
+    button3.pack()
     root_.mainloop()

@@ -41,7 +41,7 @@ def findRelationship(file):
 
 def data(canvas,frame):
     #root = tk.Tk()
-    file = "vtest18.mp4"
+    file = "vtest24.mp4"
     ##
     f = open("C:/project_youngk/data/"+file+"/"+file+".txt", 'r')
 
